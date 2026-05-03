@@ -16,6 +16,9 @@ registry/__pycache__/
 # seeds.json and tool wrappers are user-maintained, not part of the framework
 registry/seeds.json
 
+# Personal tool dependencies (user-maintained, not part of the framework)
+requirements.local.txt
+
 # Python cache
 __pycache__/
 *.pyc
