@@ -162,8 +162,9 @@ def delete_tool(tool_name: str) -> str:
     except Exception:
         pass
 
-    if tool_name in _module_cache:
-        del _module_cache[tool_name]
+    module_path = info.get("module_path")
+    if module_path and module_path in _module_cache:
+        del _module_cache[module_path]
 
     return f"🗑️ Deleted '{tool_name}' from registry."
 
