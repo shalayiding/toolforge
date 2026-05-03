@@ -150,9 +150,11 @@ uv sync
 uv run python setup_mcp.py
 ```
 
-**4. 重启 Claude Code** — 这一步必须做。MCP 服务器只在启动时加载，不重启 Claude 就看不到它们。
+**4. 用 Claude Code 直接打开 `toolforge` 文件夹作为根目录** — 必须在 `toolforge` 目录层级打开，不能是父目录或子目录。这样 Claude 才能读取 `CLAUDE.md`（项目指令）和 `.claude/commands/`（`/toolforge` 技能）。
 
-**5. 验证两个服务器已连接** — 在 Claude Code 中运行 `/mcp`，确认看到：
+**5. 重启 Claude Code** — 这一步必须做。MCP 服务器只在启动时加载，不重启 Claude 就看不到它们。
+
+**6. 验证两个服务器已连接** — 在 Claude Code 中运行 `/mcp`，确认看到：
 
 ```
 ✓ toolforge-registry

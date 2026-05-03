@@ -150,9 +150,11 @@ uv sync
 uv run python setup_mcp.py
 ```
 
-**4. Restart Claude Code** — this step is required. The MCP servers are only loaded on startup. Without a restart, Claude won't see them.
+**4. Open the `toolforge` folder as the root in Claude Code** — Claude must be opened directly at the `toolforge` directory, not a parent folder or subfolder. This is how Claude picks up `CLAUDE.md` (project instructions) and `.claude/commands/` (the `/toolforge` skill).
 
-**5. Verify both servers are connected** — run `/mcp` in Claude Code and confirm you see:
+**5. Restart Claude Code** — this step is required. The MCP servers are only loaded on startup. Without a restart, Claude won't see them.
+
+**6. Verify both servers are connected** — run `/mcp` in Claude Code and confirm you see:
 
 ```
 ✓ toolforge-registry
