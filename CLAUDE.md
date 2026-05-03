@@ -37,13 +37,20 @@ uv run python setup_mcp.py
 
 This writes `.mcp.json` with absolute paths that work on this specific machine. Must be re-run whenever the project is moved to a new location.
 
-### Step 4 — Restart Claude Code
+### Step 4 — Restart Claude Code ⚠️
 
-The user must close and reopen Claude Code (or reload the window) to pick up the new `.mcp.json`. The two MCP servers — `toolforge-registry` and `github-search` — will load automatically.
+**This step is mandatory.** MCP servers are only loaded at startup. Tell the user to fully close and reopen Claude Code (or use the "Reload Window" command). Do not skip or work around this — the tools will not be available until Claude Code restarts.
 
-### Step 5 — Verify
+### Step 5 — Verify with /mcp
 
-Call `list_all_tools()`. An empty list is normal on a fresh install. If it errors, the MCP server isn't loaded — go back to Step 3.
+Ask the user to run `/mcp` in Claude Code. They must see both servers listed as connected:
+
+```
+✓ toolforge-registry
+✓ github-search
+```
+
+If either is missing: re-run `setup_mcp.py` and restart Claude Code again. Do not proceed until both are confirmed connected.
 
 ### Step 6 — (Optional) Restore tools from seeds.json
 

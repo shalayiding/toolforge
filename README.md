@@ -148,16 +148,20 @@ uv sync
 
 # 3. Generate .mcp.json with correct paths for your machine
 uv run python setup_mcp.py
-
-# 4. Open the folder in Claude Code
-#    The two MCP servers load automatically on next launch
 ```
 
-**Verify it's working:** open Claude Code in the `toolforge` folder and ask:
+**4. Restart Claude Code** — this step is required. The MCP servers are only loaded on startup. Without a restart, Claude won't see them.
+
+**5. Verify both servers are connected** — run `/mcp` in Claude Code and confirm you see:
+
 ```
-list all tools in the registry
+✓ toolforge-registry
+✓ github-search
 ```
-If the registry is empty, that's expected on a fresh install — start adding tools with `/toolforge`.
+
+If either is missing, re-run `setup_mcp.py` and restart again.
+
+> The registry starts empty on a fresh install — that's expected. Use `/toolforge` to start adding tools.
 
 ### Option B — Let Claude install it
 
@@ -167,7 +171,7 @@ Open the `toolforge` folder in Claude Code **before** running any commands, then
 set up this project for me
 ```
 
-Claude reads `CLAUDE.md`, knows the full setup steps, and walks you through the entire installation.
+Claude reads `CLAUDE.md`, knows the full setup steps, and walks you through the entire installation — including the restart reminder and `/mcp` verification.
 
 ### Option C — Restore your tools from seeds.json
 

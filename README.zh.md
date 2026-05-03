@@ -148,16 +148,20 @@ uv sync
 
 # 3. 生成适配当前机器路径的 .mcp.json
 uv run python setup_mcp.py
-
-# 4. 用 Claude Code 打开该文件夹
-#    两个 MCP 服务器在下次启动时自动加载
 ```
 
-**验证是否成功：** 在 Claude Code 中打开 `toolforge` 文件夹，输入：
+**4. 重启 Claude Code** — 这一步必须做。MCP 服务器只在启动时加载，不重启 Claude 就看不到它们。
+
+**5. 验证两个服务器已连接** — 在 Claude Code 中运行 `/mcp`，确认看到：
+
 ```
-列出注册表里的所有工具
+✓ toolforge-registry
+✓ github-search
 ```
-如果注册表是空的，这是正常的——全新安装默认没有工具，用 `/toolforge` 开始添加即可。
+
+如果缺少其中一个，重新运行 `setup_mcp.py` 再重启。
+
+> 全新安装后注册表是空的，这是正常的。用 `/toolforge` 开始添加工具。
 
 ### 方式 B — 让 Claude 全程安装
 
@@ -167,7 +171,7 @@ uv run python setup_mcp.py
 帮我安装配置这个项目
 ```
 
-Claude 会读取 `CLAUDE.md`，知道完整的安装步骤，全程引导你完成配置。
+Claude 会读取 `CLAUDE.md`，知道完整的安装步骤，全程引导你完成配置——包括重启提醒和 `/mcp` 验证。
 
 ### 方式 C — 从 seeds.json 恢复工具
 
