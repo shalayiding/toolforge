@@ -7,10 +7,6 @@ dependencies = [
     "fastmcp",
     "chromadb",
     "httpx",
-    "aiohttp",
-    "maigret",
-    "youtube-transcript-api",
-    "bilibili-api-python",
 ]
 
 [tool.uv]
