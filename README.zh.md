@@ -140,7 +140,7 @@ Claude 在 GitHub 上搜索最佳库，阅读其 README 评估质量和可封装
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/shalayiding/toolforge
+git clone https://github.com/shalayiding/toolforge.git
 cd toolforge
 
 # 2. 安装依赖

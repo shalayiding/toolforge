@@ -140,7 +140,7 @@ Only **two MCP entries** in `.mcp.json` regardless of how many tools you add.
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/shalayiding/toolforge
+git clone https://github.com/shalayiding/toolforge.git
 cd toolforge
 
 # 2. Install dependencies
