@@ -144,5 +144,47 @@ def list_all_tools() -> list[dict]:
     ]
 
 
+@mcp.tool()
+def delete_tool(tool_name: str) -> str:
+    """Remove a single tool from the registry and vector index by name.
+
+    Use list_all_tools() to find the exact tool_name before calling this.
+    """
+    registry = _load_registry()
+    if tool_name not in registry:
+        return f"Error: '{tool_name}' not found in registry."
+
+    del registry[tool_name]
+    _save_registry(registry)
+
+    try:
+        _collection.delete(ids=[tool_name])
+    except Exception:
+        pass
+
+    if tool_name in _module_cache:
+        del _module_cache[tool_name]
+
+    return f"🗑️ Deleted '{tool_name}' from registry."
+
+
+@mcp.tool()
+def clear_registry() -> str:
+    """Remove ALL tools from the registry and vector index.
+
+    This is irreversible unless you have a seeds.json to restore from.
+    Use delete_tool() to remove a single tool instead.
+    """
+    _save_registry({})
+
+    existing_ids = _collection.get()["ids"]
+    if existing_ids:
+        _collection.delete(ids=existing_ids)
+
+    _module_cache.clear()
+
+    return "🗑️ Registry cleared. Run seed_registry.py to restore from seeds.json."
+
+
 if __name__ == "__main__":
     mcp.run()

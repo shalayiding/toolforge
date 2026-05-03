@@ -97,6 +97,8 @@ Never manually reimplement something a registered tool can already do.
 - `call_tool(tool_name, args)` — execute any registered tool by name. Dynamic import, no restart needed.
 - `register_tool(tool_name, description, module_path, function_name, repo, parameters)` — add a new tool to the registry. Called at the end of /toolforge.
 - `list_all_tools()` — list everything currently registered.
+- `delete_tool(tool_name)` — remove a single tool from the registry and vector index.
+- `clear_registry()` — remove all tools. Irreversible unless seeds.json exists.
 
 ### github-search (use when no registry match)
 - `search_repos(query, language, min_stars, top_k)` — search GitHub by description. No token needed.
