@@ -1,0 +1,17 @@
+[project]
+name = "toolforge"
+version = "0.1.0"
+description = "Self-expanding AI toolbox — Claude finds, wraps, and registers GitHub repos as MCP tools"
+requires-python = ">=3.10"
+dependencies = [
+    "fastmcp",
+    "chromadb",
+    "httpx",
+    "aiohttp",
+    "maigret",
+    "youtube-transcript-api",
+    "bilibili-api-python",
+]
+
+[tool.uv]
+dev-dependencies = []

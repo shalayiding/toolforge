@@ -1,0 +1,7 @@
+{
+  "enabledMcpjsonServers": [
+    "toolforge-registry",
+    "github-search"
+  ],
+  "enableAllProjectMcpServers": true
+}
