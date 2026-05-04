@@ -6,11 +6,7 @@ from typing import Optional
 import maigret
 from maigret.sites import MaigretDatabase
 
-# Find the database bundled with the pip-installed package.
-# Falls back to a locally cloned repo under temp/ if the package path doesn't exist.
-_pkg_db = os.path.join(os.path.dirname(maigret.__file__), "resources", "data.json")
-_clone_db = os.path.join(os.path.dirname(os.path.dirname(__file__)), "temp", "maigret", "maigret", "resources", "data.json")
-DB_PATH = _pkg_db if os.path.exists(_pkg_db) else _clone_db
+DB_PATH = os.path.join(os.path.dirname(maigret.__file__), "resources", "data.json")
 
 
 def _load_db(top: int = 500, tags: list[str] = []) -> dict:
