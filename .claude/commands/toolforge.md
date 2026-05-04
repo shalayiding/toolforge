@@ -1,6 +1,6 @@
 ---
 name: toolforge
-description: Find a GitHub repository (or accept a URL) and convert it into a FastMCP service that Claude can use directly.
+description: Find a GitHub repository (or accept a URL) and convert it into a callable tool registered in the shared registry.
 ---
 
 Convert a GitHub repository into a callable tool registered in the shared registry.
@@ -82,7 +82,7 @@ Answer these questions before proceeding:
 All packages go into the single shared venv managed by uv at `./.venv/`.
 
 ```bash
-uv pip install -e ./temp/{repo_name} --quiet
+uv pip install ./temp/{repo_name} --quiet
 ```
 
 If that fails (no `pyproject.toml` or `setup.py`):
@@ -215,3 +215,17 @@ Done. {N} tools from '{repo_name}' are now in the registry.
 To use them: call search_tools("{what it does}") — the registry will find them.
 No restart needed.
 ```
+
+---
+
+## Step 9 — (Optional) Contribute to Community
+
+**Skip this step if `./community/{repo_name}_tools.py` already exists** — the tool is already shared.
+
+If this is a new repo not yet in `community/`, and it's a well-known public library that works cleanly after `pip install`, offer to contribute it:
+
+1. Copy `./temp/{repo_name}_tools.py` → `./community/{repo_name}_tools.py`
+2. Add the package(s) to `./community/requirements.txt`
+3. Append the tool entries to `./community/seeds.json` with `"module_path": "community/{repo_name}_tools.py"`
+
+Then commit `community/` to git. New users running `seed_registry.py --community` will get these tools automatically.

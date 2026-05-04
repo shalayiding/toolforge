@@ -75,7 +75,7 @@ Claude 用自然语言搜索工具库。相似度 ≥ 0.5 时，不会直接复�
 
 **当没有合适工具时。**
 
-Claude 在 GitHub 上搜索最佳库，阅读其 README 评估质量和可封装性，然后运行 `/toolforge`。该技能会克隆仓库、读懂源码、生成 FastMCP 封装、将包安装到共享 `.venv`，并将工具注册到 ChromaDB（用于未来搜索）和 `seeds.json`（用于持久化）。工具立即可用——无需重启。
+Claude 在 GitHub 上搜索最佳库，阅读其 README 评估质量和可封装性，然后运行 `/toolforge`。该技能会克隆仓库、读懂源码、生成纯 Python 工具模块、将包安装到共享 `.venv`，并将工具注册到 ChromaDB（用于未来搜索）和 `seeds.json`（用于持久化）。工具立即可用——无需重启。
 
   </td>
   </tr>
@@ -103,8 +103,13 @@ Claude 在 GitHub 上搜索最佳库，阅读其 README 评估质量和可封装
 │   ├── seed_registry.py     ← 从 seeds.json 重建 ChromaDB
 │   └── seeds.json           ← 你的个人工具配置（已加入 .gitignore）
 │
+├── community/               ← 预置工具，随 git 分发，所有用户共享
+│   ├── *_tools.py           ← 纯 Python 工具模块（已含 14 个工具）
+│   ├── seeds.json           ← 社区工具配置
+│   └── requirements.txt     ← 社区工具的 pip 依赖
+│
 └── temp/
-    └── *_mcp_server.py      ← 自动生成的 FastMCP 封装（已加入 .gitignore）
+    └── *_tools.py           ← /toolforge 自动生成的工具模块（已加入 .gitignore）
 ```
 
 无论添加多少工具，`.mcp.json` 中永远只有**两条 MCP 配置项**。
@@ -163,7 +168,7 @@ uv run python setup_mcp.py
 
 如果缺少其中一个，重新运行 `setup_mcp.py` 再重启。
 
-> 全新安装后注册表是空的，这是正常的。用 `/toolforge` 开始添加工具。
+> 全新安装后注册表是空的，这是正常的。运行 `uv run python registry/seed_registry.py --community` 加载 14 个预置工具，或用 `/toolforge` 添加任意 GitHub 仓库。
 
 ### 方式 B — 让 Claude 全程安装
 
@@ -175,7 +180,15 @@ uv run python setup_mcp.py
 
 Claude 会读取 `CLAUDE.md`，知道完整的安装步骤，全程引导你完成配置——包括重启提醒和 `/mcp` 验证。
 
-### 方式 C — 从 seeds.json 恢复工具
+### 方式 C — 加载社区预置工具
+
+仓库内置 14 个开箱即用的工具（股票、YouTube 字幕、新闻、Mermaid 图表、OSINT），无需消耗 token：
+
+```bash
+uv run python registry/seed_registry.py --community
+```
+
+### 方式 D — 从 seeds.json 恢复个人工具
 
 如果你有之前机器上的 `registry/seeds.json`，运行：
 

@@ -52,14 +52,19 @@ Ask the user to run `/mcp` in Claude Code. They must see both servers listed as 
 
 If either is missing: re-run `setup_mcp.py` and restart Claude Code again. Do not proceed until both are confirmed connected.
 
-### Step 6 — (Optional) Restore tools from seeds.json
+### Step 6 — (Optional) Load tools
 
-If the user has a `registry/seeds.json` from a previous machine:
+**Option A — community tools** (recommended for new users): loads the 14 pre-built tools included in this repo (yfinance, YouTube transcripts, news, Mermaid diagrams, OSINT):
+```bash
+uv run python registry/seed_registry.py --community
+```
+
+**Option B — restore personal seeds** from a previous machine (`registry/seeds.json`):
 ```bash
 uv run python registry/seed_registry.py
 ```
 
-This rebuilds ChromaDB and restores all registered tools. The registry will be fully populated and ready to use.
+Both commands rebuild ChromaDB and register tools into the live registry.
 
 ### Troubleshooting
 

@@ -1,0 +1,5 @@
+yfinance
+youtube-transcript-api
+newspaper4k
+gnews
+maigret

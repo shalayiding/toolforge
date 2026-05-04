@@ -7,6 +7,7 @@ dependencies = [
     "fastmcp",
     "chromadb",
     "httpx",
+    "python-dotenv",
 ]
 
 [tool.uv]

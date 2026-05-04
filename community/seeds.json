@@ -1,0 +1,173 @@
+[
+  {
+    "tool_name": "search_username",
+    "description": "Search for a username across social networks and websites. Returns a dict of site names to {status, url, tags}. Status values: CLAIMED (found), NOT_FOUND, ERROR. Params: username (str, required) — the username to search; top_sites (int, default 500) — how many sites to check; tags (str, optional) — comma-separated filter tags e.g. 'social,photo'; timeout (int, default 30) — seconds per request.",
+    "module_path": "community/maigret_tools.py",
+    "function_name": "search_username",
+    "repo": "maigret",
+    "github_url": "https://github.com/soxoj/maigret",
+    "parameters": {
+      "username": {"type": "string", "required": true, "description": "The username to search for"},
+      "top_sites": {"type": "integer", "required": false, "default": 500, "description": "Number of sites to check (max 500)"},
+      "tags": {"type": "string", "required": false, "description": "Comma-separated category filter, e.g. 'social,photo,gaming'. Use list_available_tags to see options."},
+      "timeout": {"type": "integer", "required": false, "default": 30, "description": "Timeout in seconds per request"}
+    }
+  },
+  {
+    "tool_name": "search_username_claimed_only",
+    "description": "Search for a username and return ONLY confirmed accounts (CLAIMED status). Returns a list of {site, url, tags}. Best tool when you just want to know where someone has accounts. Params: username (str, required); top_sites (int, default 500); tags (str, optional) — comma-separated e.g. 'social,gaming'; timeout (int, default 30).",
+    "module_path": "community/maigret_tools.py",
+    "function_name": "search_username_claimed_only",
+    "repo": "maigret",
+    "github_url": "https://github.com/soxoj/maigret",
+    "parameters": {
+      "username": {"type": "string", "required": true, "description": "The username to search for"},
+      "top_sites": {"type": "integer", "required": false, "default": 500, "description": "Number of sites to check"},
+      "tags": {"type": "string", "required": false, "description": "Comma-separated category filter e.g. 'social,gaming'"},
+      "timeout": {"type": "integer", "required": false, "default": 30, "description": "Timeout in seconds per request"}
+    }
+  },
+  {
+    "tool_name": "list_available_tags",
+    "description": "List all available site category tags that can be used to filter username searches. Returns a sorted list of tag strings such as 'social', 'gaming', 'photo', 'music', 'dating'. No parameters required.",
+    "module_path": "community/maigret_tools.py",
+    "function_name": "list_available_tags",
+    "repo": "maigret",
+    "github_url": "https://github.com/soxoj/maigret",
+    "parameters": {}
+  },
+  {
+    "tool_name": "get_transcript",
+    "description": "Fetch the transcript of a YouTube video as a list of timestamped snippets. Returns list of {text, start, duration}. Params: video (str, required) — video ID e.g. 'dQw4w9WgXcQ' OR full YouTube URL; languages (str, default 'en') — comma-separated language priority list e.g. 'en' or 'zh,en' (tries first language, falls back to next).",
+    "module_path": "community/youtube_transcript_tools.py",
+    "function_name": "get_transcript",
+    "repo": "youtube-transcript-api",
+    "github_url": "https://github.com/jdepoix/youtube-transcript-api",
+    "parameters": {
+      "video": {"type": "string", "required": true, "description": "Video ID (e.g. 'dQw4w9WgXcQ') or full YouTube URL"},
+      "languages": {"type": "string", "required": false, "default": "en", "description": "Comma-separated language priority list e.g. 'en' or 'zh,en'"}
+    }
+  },
+  {
+    "tool_name": "get_transcript_text",
+    "description": "Fetch the full transcript of a YouTube video as a single plain text string. Best for summarizing, translating, or analyzing video content. Params: video (str, required) — video ID e.g. 'dQw4w9WgXcQ' OR full YouTube URL; languages (str, default 'en') — comma-separated language priority list e.g. 'en' or 'zh,en'.",
+    "module_path": "community/youtube_transcript_tools.py",
+    "function_name": "get_transcript_text",
+    "repo": "youtube-transcript-api",
+    "github_url": "https://github.com/jdepoix/youtube-transcript-api",
+    "parameters": {
+      "video": {"type": "string", "required": true, "description": "Video ID (e.g. 'dQw4w9WgXcQ') or full YouTube URL"},
+      "languages": {"type": "string", "required": false, "default": "en", "description": "Comma-separated language priority list e.g. 'en' or 'zh,en'"}
+    }
+  },
+  {
+    "tool_name": "list_available_transcripts",
+    "description": "List all available transcript languages for a YouTube video. Returns list of {language, language_code, is_generated, is_translatable}. Use this before get_transcript when the default 'en' language fails. Params: video (str, required) — video ID or full YouTube URL.",
+    "module_path": "community/youtube_transcript_tools.py",
+    "function_name": "list_available_transcripts",
+    "repo": "youtube-transcript-api",
+    "github_url": "https://github.com/jdepoix/youtube-transcript-api",
+    "parameters": {
+      "video": {"type": "string", "required": true, "description": "Video ID (e.g. 'dQw4w9WgXcQ') or full YouTube URL"}
+    }
+  },
+  {
+    "tool_name": "render_diagram",
+    "description": "Render a Mermaid diagram to a PNG or SVG image file using the mermaid.ink API — no local installation required. Params: diagram (str, required) — Mermaid diagram source code e.g. 'flowchart TD\\n A --> B'; output_path (str, required) — absolute path to save the file e.g. '/path/to/flow.png'; fmt (str, default 'png') — 'png' or 'svg'. Returns saved file path or error message.",
+    "module_path": "community/mermaid_tools.py",
+    "function_name": "render_diagram",
+    "repo": "mermaid-ink",
+    "github_url": "https://github.com/mermaid-js/mermaid",
+    "parameters": {
+      "diagram": {"type": "string", "required": true, "description": "Mermaid diagram source code"},
+      "output_path": {"type": "string", "required": true, "description": "Absolute path to save the output file"},
+      "fmt": {"type": "string", "required": false, "default": "png", "description": "'png' or 'svg'"}
+    }
+  },
+  {
+    "tool_name": "render_diagram_url",
+    "description": "Get the mermaid.ink URL for a Mermaid diagram without downloading it. Useful for embedding diagrams in Markdown as image URLs. Params: diagram (str, required) — Mermaid diagram source code; fmt (str, default 'png') — 'png' or 'svg'. Returns the full mermaid.ink URL.",
+    "module_path": "community/mermaid_tools.py",
+    "function_name": "render_diagram_url",
+    "repo": "mermaid-ink",
+    "github_url": "https://github.com/mermaid-js/mermaid",
+    "parameters": {
+      "diagram": {"type": "string", "required": true, "description": "Mermaid diagram source code"},
+      "fmt": {"type": "string", "required": false, "default": "png", "description": "'png' or 'svg'"}
+    }
+  },
+  {
+    "tool_name": "get_top_news",
+    "description": "Fetch top news headlines from Google News. Returns a JSON list of articles each with: title, url, published_date, publisher, description. Params: country (str, default 'US') — 2-letter country code; language (str, default 'en'); period (str, default '1d') — '1h','1d','7d','30d'; max_results (int, default 10).",
+    "module_path": "community/newspaper4k_tools.py",
+    "function_name": "get_top_news",
+    "repo": "newspaper4k",
+    "github_url": "https://github.com/AndyTheFactory/newspaper4k",
+    "parameters": {
+      "country": {"type": "string", "required": false, "default": "US", "description": "2-letter country code e.g. 'US', 'CN', 'GB'"},
+      "language": {"type": "string", "required": false, "default": "en", "description": "Language code e.g. 'en', 'zh', 'de'"},
+      "period": {"type": "string", "required": false, "default": "1d", "description": "Time window: '1h', '1d', '7d', '30d'"},
+      "max_results": {"type": "integer", "required": false, "default": 10, "description": "Number of articles to return"}
+    }
+  },
+  {
+    "tool_name": "search_news",
+    "description": "Search news articles by keyword using Google News. Returns a JSON list with: title, url, published_date, publisher, description. Params: query (str, required) — keywords e.g. 'AI regulation'; language (str, default 'en'); country (str, default 'US'); period (str, default '7d'); max_results (int, default 10).",
+    "module_path": "community/newspaper4k_tools.py",
+    "function_name": "search_news",
+    "repo": "newspaper4k",
+    "github_url": "https://github.com/AndyTheFactory/newspaper4k",
+    "parameters": {
+      "query": {"type": "string", "required": true, "description": "Search keywords e.g. 'AI regulation', 'Apple earnings'"},
+      "language": {"type": "string", "required": false, "default": "en", "description": "Language code e.g. 'en', 'zh'"},
+      "country": {"type": "string", "required": false, "default": "US", "description": "2-letter country code"},
+      "period": {"type": "string", "required": false, "default": "7d", "description": "Time window: '1h', '1d', '7d', '30d'"},
+      "max_results": {"type": "integer", "required": false, "default": 10, "description": "Number of results"}
+    }
+  },
+  {
+    "tool_name": "get_article",
+    "description": "Fetch and parse a full news article from a URL. Returns JSON with: title, text (full body up to 3000 chars), authors, publish_date, top_image, url. Params: url (str, required) — full article URL.",
+    "module_path": "community/newspaper4k_tools.py",
+    "function_name": "get_article",
+    "repo": "newspaper4k",
+    "github_url": "https://github.com/AndyTheFactory/newspaper4k",
+    "parameters": {
+      "url": {"type": "string", "required": true, "description": "Full URL of the article"}
+    }
+  },
+  {
+    "tool_name": "get_stock_price",
+    "description": "Get the current stock price and key metrics for a single ticker. Returns JSON with: symbol, name, price, change, change_pct, open, volume, market_cap, day_high, day_low, week_52_high, week_52_low, pe_ratio, currency. Params: symbol (str, required) — ticker e.g. 'AAPL', 'TSLA', 'LMT'.",
+    "module_path": "community/yfinance_tools.py",
+    "function_name": "get_stock_price",
+    "repo": "yfinance",
+    "github_url": "https://github.com/ranaroussi/yfinance",
+    "parameters": {
+      "symbol": {"type": "string", "required": true, "description": "Ticker symbol e.g. 'AAPL', 'TSLA', 'LMT'"}
+    }
+  },
+  {
+    "tool_name": "get_multiple_stock_prices",
+    "description": "Get current prices for multiple stocks at once. Returns a JSON list of stock objects each with: symbol, name, price, change, change_pct, open, volume, market_cap, day_high, day_low, week_52_high, week_52_low, pe_ratio, currency. Params: symbols (str, required) — comma-separated tickers e.g. 'AAPL,MSFT,TSLA'.",
+    "module_path": "community/yfinance_tools.py",
+    "function_name": "get_multiple_stock_prices",
+    "repo": "yfinance",
+    "github_url": "https://github.com/ranaroussi/yfinance",
+    "parameters": {
+      "symbols": {"type": "string", "required": true, "description": "Comma-separated ticker symbols e.g. 'AAPL,MSFT,TSLA'"}
+    }
+  },
+  {
+    "tool_name": "get_stock_history",
+    "description": "Get historical OHLCV price data for a stock. Returns JSON with arrays: dates, open, high, low, close, volume. Params: symbol (str, required) — ticker e.g. 'AAPL'; period (str, default '1mo') — '1d','5d','1mo','3mo','6mo','1y','2y','5y'.",
+    "module_path": "community/yfinance_tools.py",
+    "function_name": "get_stock_history",
+    "repo": "yfinance",
+    "github_url": "https://github.com/ranaroussi/yfinance",
+    "parameters": {
+      "symbol": {"type": "string", "required": true, "description": "Ticker symbol e.g. 'AAPL'"},
+      "period": {"type": "string", "required": false, "default": "1mo", "description": "Time period: '1d','5d','1mo','3mo','6mo','1y','2y','5y'"}
+    }
+  }
+]

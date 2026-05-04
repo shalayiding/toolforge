@@ -19,6 +19,9 @@ registry/seeds.json
 # Personal tool dependencies (user-maintained, not part of the framework)
 requirements.local.txt
 
+# uv lockfile — let each user resolve latest versions
+uv.lock
+
 # Python cache
 __pycache__/
 *.pyc
