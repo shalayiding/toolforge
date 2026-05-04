@@ -103,13 +103,10 @@ Claude 在 GitHub 上搜索最佳库，阅读其 README 评估质量和可封装
 │   ├── seed_registry.py     ← 从 seeds.json 重建 ChromaDB
 │   └── seeds.json           ← 你的个人工具配置（已加入 .gitignore）
 │
-├── community/               ← 预置工具，随 git 分发，所有用户共享
-│   ├── *_tools.py           ← 纯 Python 工具模块（已含 14 个工具）
-│   ├── seeds.json           ← 社区工具配置
-│   └── requirements.txt     ← 社区工具的 pip 依赖
-│
-└── temp/
-    └── *_tools.py           ← /toolforge 自动生成的工具模块（已加入 .gitignore）
+└── community/               ← 预置工具，随 git 分发，所有用户共享
+    ├── *_tools.py           ← 纯 Python 工具模块（已含 14 个工具）
+    ├── seeds.json           ← 社区工具配置
+    └── requirements.txt     ← 社区工具的 pip 依赖
 ```
 
 无论添加多少工具，`.mcp.json` 中永远只有**两条 MCP 配置项**。
