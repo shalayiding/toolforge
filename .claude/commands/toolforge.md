@@ -93,38 +93,26 @@ uv pip install -r ./temp/{repo_name}/requirements.txt --quiet
 
 ---
 
-## Step 6 — Generate the FastMCP Server
+## Step 6 — Generate the Tool Module
 
-Write `./temp/{repo_name}_mcp_server.py` based on what you learned.
+Write `./temp/{repo_name}_tools.py` — a plain Python module with regular functions. No FastMCP, no decorators.
 
 **For a Python package (import and call directly):**
 
 ```python
-from fastmcp import FastMCP
-
 import {package_name}
 
-mcp = FastMCP("{repo_name}")
-
-@mcp.tool()
 def {tool_name}({param}: {type}) -> {return_type}:
     """{clear description of what this tool does}"""
     result = {package_name}.{function}({param})
     return result
-
-if __name__ == "__main__":
-    mcp.run()
 ```
 
 **For a CLI tool (subprocess):**
 
 ```python
-from fastmcp import FastMCP
 import subprocess
 
-mcp = FastMCP("{repo_name}")
-
-@mcp.tool()
 def {tool_name}({param}: str) -> str:
     """{clear description of what this tool does}"""
     result = subprocess.run(
@@ -136,36 +124,45 @@ def {tool_name}({param}: str) -> str:
     if result.returncode != 0:
         return f"Error: {result.stderr}"
     return result.stdout
-
-if __name__ == "__main__":
-    mcp.run()
 ```
 
-**Rules when writing the server:**
-- Expose only the 2–5 most useful operations as MCP tools
+**For an HTTP API (httpx):**
+
+```python
+import httpx
+
+def {tool_name}({param}: str) -> str:
+    """{clear description of what this tool does}"""
+    resp = httpx.get(f"https://api.example.com/{param}", timeout=30)
+    resp.raise_for_status()
+    return resp.text
+```
+
+**Rules when writing the module:**
+- Expose only the 2–5 most useful operations as functions
 - Write clear docstrings — Claude reads these to decide what to call
 - Use proper Python type hints on all parameters and return values
 - For async functions in the underlying package, use `async def` and `await`
 - Return errors as strings rather than raising exceptions
-- Keep it simple — no extra abstraction
+- Keep it simple — no extra abstraction, no FastMCP
 
 ---
 
 ## Step 7 — Verify and Register
 
-Run a quick import check using the shared venv:
+Run a quick import check:
 
 **Mac/Linux:**
 ```bash
-./.venv/bin/python ./temp/{repo_name}_mcp_server.py
+./.venv/bin/python -c "import importlib.util; spec = importlib.util.spec_from_file_location('t', './temp/{repo_name}_tools.py'); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m); print('OK')"
 ```
 
 **Windows:**
 ```bash
-./.venv/Scripts/python ./temp/{repo_name}_mcp_server.py
+./.venv/Scripts/python -c "import importlib.util; spec = importlib.util.spec_from_file_location('t', './temp/{repo_name}_tools.py'); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m); print('OK')"
 ```
 
-If it starts cleanly, do two things for each tool exposed in the MCP server:
+If it prints `OK`, do two things for each function in the module:
 
 **1. Append to `./registry/seeds.json`** — this is the source of truth for tool configs:
 
@@ -173,9 +170,10 @@ If it starts cleanly, do two things for each tool exposed in the MCP server:
 {
   "tool_name": "{tool_name}",
   "description": "{full description including: what it does, each param name/type/default/meaning, and return value format}",
-  "module_path": "temp/{repo_name}_mcp_server.py",
+  "module_path": "temp/{repo_name}_tools.py",
   "function_name": "{function_name}",
   "repo": "{repo_name}",
+  "github_url": "{https://github.com/owner/repo}",
   "parameters": {
     "{param_name}": {
       "type": "string|integer|boolean",
@@ -197,9 +195,10 @@ Use a relative path for `module_path` (starting with `temp/`). Read the existing
 register_tool(
   tool_name     = "{tool_name}",
   description   = "{same full description as above}",
-  module_path   = "{absolute path to ./temp/{repo_name}_mcp_server.py}",
+  module_path   = "{absolute path to ./temp/{repo_name}_tools.py}",
   function_name = "{function_name}",
   repo          = "{repo_name}",
+  github_url    = "{https://github.com/owner/repo}",
   parameters    = { ... same parameters dict as above ... },
 )
 ```

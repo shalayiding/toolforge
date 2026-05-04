@@ -103,12 +103,13 @@ def register_tool(
     module_path: str,
     function_name: str,
     repo: str,
+    github_url: Optional[str] = None,
     parameters: Optional[dict] = None,
 ) -> str:
     """Register a tool into the registry and vector index.
 
-    Called automatically by /toolforge after generating an MCP server.
-    module_path must be the absolute path to the _mcp_server.py file.
+    Called automatically by /toolforge after generating a tool module.
+    module_path must be the absolute path to the _tools.py file.
     """
     registry = _load_registry()
     registry[tool_name] = {
@@ -116,6 +117,7 @@ def register_tool(
         "function_name": function_name,
         "description": description,
         "repo": repo,
+        "github_url": github_url or "",
         "parameters": parameters or {},
     }
     _save_registry(registry)
@@ -136,6 +138,8 @@ def list_all_tools() -> list[dict]:
         {
             "tool_name": name,
             "repo": info["repo"],
+            "github_url": info.get("github_url", ""),
+            "file": Path(info["module_path"]).name,
             "description": info["description"][:120] + "..."
             if len(info["description"]) > 120
             else info["description"],
