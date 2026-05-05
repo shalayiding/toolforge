@@ -11,7 +11,7 @@ The user provides a GitHub URL, or describes what they need and Claude finds the
 
 ## Step 0 — Check the Registry First
 
-Before cloning anything, call `search_tools(query)` with a description of what the repo does.
+Before doing anything else, call `search_tools(query)` with a description of what the repo does.
 
 **Similarity < 0.5** → no useful match, continue to Step 1.
 
@@ -28,7 +28,22 @@ If no (wrong platform, missing feature, parameter mismatch) → the similarity i
 
 ---
 
-## Step 1 — Check Prerequisites
+## Step 1 — Find the Repo
+
+**If the user already provided a GitHub URL** → skip directly to Step 2.
+
+**If no URL was given**, use `search_repos(query)` from the github-search MCP to find a suitable library.
+
+Try at least **5 different queries** before concluding no library exists. Vary the terms:
+- Task domain: `"email registration checker"`, `"osint email lookup"`
+- Action + noun: `"check email sites"`, `"email footprint"`, `"pdf text extraction"`
+- Related synonyms or known tool names if the user mentioned one
+
+If after 5 queries nothing wrappable is found (importable Python package, CLI, or HTTP API), tell the user why and stop. **Do NOT fall back to implementing the task yourself using Claude's own knowledge.**
+
+---
+
+## Step 2 — Check Prerequisites
 
 ```bash
 python --version
@@ -39,31 +54,34 @@ Both must be available. If not, tell the user and stop.
 
 ---
 
-## Step 2 — Clone
+## Step 3 — Clone the Repo
+
+Always clone the source code — the README alone is not enough to understand the exact API:
 
 ```bash
-mkdir -p ./temp
-git clone {github_url} ./temp/{repo_name}
+git clone {github_url} ./community/{repo_name}
 ```
+
+The cloned source stays in `community/{repo_name}/` for reference. It is gitignored (nested `.git` dirs are not tracked by the parent repo).
 
 ---
 
-## Step 3 — Read and Understand the Repo
+## Step 4 — Read and Understand the Repo
 
-Read the following files carefully:
+Read these files from `./community/{repo_name}/`:
 - `README.md` — what does this tool do? what are the main use cases?
 - `pyproject.toml` or `requirements.txt` or `package.json` — package name and dependencies
-- The main source files — understand the actual functions, classes, CLI interface
+- The main source files — actual functions, classes, CLI interface, async patterns
 
 Answer these questions before proceeding:
 1. What does this tool DO in one sentence?
 2. What are the 2–5 most useful operations it performs?
 3. How is it called? (importable Python API / CLI / HTTP)
-4. What are the inputs and outputs of each operation?
+4. What are the exact function signatures, arguments, and return types?
 
 ---
 
-## Step 4 — Decide: Is This Wrappable?
+## Step 5 — Decide: Is This Wrappable?
 
 **Wrappable — continue:**
 - Python package with importable functions or classes
@@ -77,25 +95,30 @@ Answer these questions before proceeding:
 
 ---
 
-## Step 5 — Install into the Shared Venv
+## Step 6 — Install into the Shared Venv
 
 All packages go into the single shared venv managed by uv at `./.venv/`.
 
+**For pip packages (most common):**
 ```bash
-uv pip install ./temp/{repo_name} --quiet
+uv pip install {package_name} --quiet
+```
+
+**For source-only packages (no pip release):**
+```bash
+uv pip install ./community/{repo_name} --quiet
 ```
 
 If that fails (no `pyproject.toml` or `setup.py`):
-
 ```bash
-uv pip install -r ./temp/{repo_name}/requirements.txt --quiet
+uv pip install -r ./community/{repo_name}/requirements.txt --quiet
 ```
 
 ---
 
-## Step 6 — Generate the Tool Module
+## Step 7 — Generate the Tool Module
 
-Write `./temp/{repo_name}_tools.py` — a plain Python module with regular functions. No FastMCP, no decorators.
+Write `./community/{repo_name}_tools.py` — a plain Python module with regular functions. No FastMCP, no decorators.
 
 **For a Python package (import and call directly):**
 
@@ -148,29 +171,31 @@ def {tool_name}({param}: str) -> str:
 
 ---
 
-## Step 7 — Verify and Register
+## Step 8 — Verify and Register
 
 Run a quick import check:
 
 **Mac/Linux:**
 ```bash
-./.venv/bin/python -c "import importlib.util; spec = importlib.util.spec_from_file_location('t', './temp/{repo_name}_tools.py'); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m); print('OK')"
+./.venv/bin/python -c "import importlib.util; spec = importlib.util.spec_from_file_location('t', './community/{repo_name}_tools.py'); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m); print('OK')"
 ```
 
 **Windows:**
 ```bash
-./.venv/Scripts/python -c "import importlib.util; spec = importlib.util.spec_from_file_location('t', './temp/{repo_name}_tools.py'); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m); print('OK')"
+./.venv/Scripts/python -c "import importlib.util; spec = importlib.util.spec_from_file_location('t', './community/{repo_name}_tools.py'); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m); print('OK')"
 ```
 
-If it prints `OK`, do two things for each function in the module:
+If it prints `OK`, also run a quick **functional test** by calling one of the functions with a real input to confirm it actually works before registering.
 
-**1. Append to `./registry/seeds.json`** — this is the source of truth for tool configs:
+Then do three things:
+
+**1. Append to `./community/seeds.json`:**
 
 ```json
 {
   "tool_name": "{tool_name}",
   "description": "{full description including: what it does, each param name/type/default/meaning, and return value format}",
-  "module_path": "temp/{repo_name}_tools.py",
+  "module_path": "community/{repo_name}_tools.py",
   "function_name": "{function_name}",
   "repo": "{repo_name}",
   "github_url": "{https://github.com/owner/repo}",
@@ -187,15 +212,15 @@ If it prints `OK`, do two things for each function in the module:
 
 **Description must be self-contained** — include param names, types, and what each does. This is the only info Claude has when deciding how to call the tool; don't make it go read source files.
 
-Use a relative path for `module_path` (starting with `temp/`). Read the existing `seeds.json`, append the new entries, and write it back.
+**2. Add the package to `./community/requirements.txt`** so new users get it via `seed_registry.py --community`.
 
-**2. Call `register_tool()` to load it into the live registry immediately:**
+**3. Call `register_tool()` to load it into the live registry immediately:**
 
 ```
 register_tool(
   tool_name     = "{tool_name}",
   description   = "{same full description as above}",
-  module_path   = "{absolute path to ./temp/{repo_name}_tools.py}",
+  module_path   = "{absolute path to ./community/{repo_name}_tools.py}",
   function_name = "{function_name}",
   repo          = "{repo_name}",
   github_url    = "{https://github.com/owner/repo}",
@@ -203,11 +228,11 @@ register_tool(
 )
 ```
 
-`seeds.json` persists the config for future re-seeding. `register_tool()` activates it in the current session. Do both.
+`community/seeds.json` persists the config for future re-seeding. `register_tool()` activates it in the current session. Do both.
 
 ---
 
-## Step 8 — Tell the User
+## Step 9 — Tell the User
 
 ```
 Done. {N} tools from '{repo_name}' are now in the registry.
@@ -215,17 +240,3 @@ Done. {N} tools from '{repo_name}' are now in the registry.
 To use them: call search_tools("{what it does}") — the registry will find them.
 No restart needed.
 ```
-
----
-
-## Step 9 — (Optional) Contribute to Community
-
-**Skip this step if `./community/{repo_name}_tools.py` already exists** — the tool is already shared.
-
-If this is a new repo not yet in `community/`, and it's a well-known public library that works cleanly after `pip install`, offer to contribute it:
-
-1. Copy `./temp/{repo_name}_tools.py` → `./community/{repo_name}_tools.py`
-2. Add the package(s) to `./community/requirements.txt`
-3. Append the tool entries to `./community/seeds.json` with `"module_path": "community/{repo_name}_tools.py"`
-
-Then commit `community/` to git. New users running `seed_registry.py --community` will get these tools automatically.

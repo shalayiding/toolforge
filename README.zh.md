@@ -104,7 +104,8 @@ Claude 在 GitHub 上搜索最佳库，阅读其 README 评估质量和可封装
 │   └── seeds.json           ← 你的个人工具配置（已加入 .gitignore）
 │
 └── community/               ← 预置工具，随 git 分发，所有用户共享
-    ├── *_tools.py           ← 纯 Python 工具模块（已含 14 个工具）
+    ├── *_tools.py           ← 纯 Python 工具模块（已含 16 个工具）
+    ├── {repo_name}/         ← 克隆的源码，供参考（已加入 .gitignore）
     ├── seeds.json           ← 社区工具配置
     └── requirements.txt     ← 社区工具的 pip 依赖
 ```
@@ -165,7 +166,7 @@ uv run python setup_mcp.py
 
 如果缺少其中一个，重新运行 `setup_mcp.py` 再重启。
 
-> 全新安装后注册表是空的，这是正常的。运行 `uv run python registry/seed_registry.py --community` 加载 14 个预置工具，或用 `/toolforge` 添加任意 GitHub 仓库。
+> 全新安装后注册表是空的，这是正常的。运行 `uv run python registry/seed_registry.py --community` 加载 16 个预置工具，或用 `/toolforge` 添加任意 GitHub 仓库。
 
 ### 方式 B — 让 Claude 全程安装
 
@@ -179,7 +180,7 @@ Claude 会读取 `CLAUDE.md`，知道完整的安装步骤，全程引导你完�
 
 ### 方式 C — 加载社区预置工具
 
-仓库内置 14 个开箱即用的工具（股票、YouTube 字幕、新闻、Mermaid 图表、OSINT），无需消耗 token：
+仓库内置 16 个开箱即用的工具（股票、YouTube 字幕、新闻、Mermaid 图表、OSINT、邮箱 OSINT），无需消耗 token：
 
 ```bash
 uv run python registry/seed_registry.py --community

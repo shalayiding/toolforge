@@ -3,3 +3,5 @@ youtube-transcript-api
 newspaper4k
 gnews
 maigret
+holehe
+yt-dlp

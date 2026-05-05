@@ -104,7 +104,8 @@ Claude searches GitHub for the best library, reads its README to evaluate qualit
 │   └── seeds.json           ← your personal tool configs (gitignored)
 │
 └── community/               ← pre-built tools shared with all users (tracked in git)
-    ├── *_tools.py           ← plain Python tool modules (14 tools included)
+    ├── *_tools.py           ← plain Python tool modules (16 tools included)
+    ├── {repo_name}/         ← cloned source code for reference (gitignored)
     ├── seeds.json           ← community tool configs
     └── requirements.txt     ← pip deps for community tools
 ```
@@ -165,7 +166,7 @@ uv run python setup_mcp.py
 
 If either is missing, re-run `setup_mcp.py` and restart again.
 
-> The registry starts empty on a fresh install — that's expected. Load the 14 included community tools with `uv run python registry/seed_registry.py --community`, or use `/toolforge` to add any GitHub repo.
+> The registry starts empty on a fresh install — that's expected. Load the 16 included community tools with `uv run python registry/seed_registry.py --community`, or use `/toolforge` to add any GitHub repo.
 
 ### Option B — Let Claude install it
 
@@ -179,7 +180,7 @@ Claude reads `CLAUDE.md`, knows the full setup steps, and walks you through the 
 
 ### Option C — Load community tools
 
-14 pre-built tools are included in the repo (yfinance, YouTube transcripts, news, Mermaid diagrams, OSINT). No tokens needed:
+16 pre-built tools are included in the repo (yfinance, YouTube transcripts, news, Mermaid diagrams, OSINT, email OSINT). No tokens needed:
 
 ```bash
 uv run python registry/seed_registry.py --community

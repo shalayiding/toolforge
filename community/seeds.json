@@ -169,5 +169,66 @@
       "symbol": {"type": "string", "required": true, "description": "Ticker symbol e.g. 'AAPL'"},
       "period": {"type": "string", "required": false, "default": "1mo", "description": "Time period: '1d','5d','1mo','3mo','6mo','1y','2y','5y'"}
     }
+  },
+  {
+    "tool_name": "check_email_registrations",
+    "description": "Check which websites an email address is registered on using holehe. Queries 120+ sites (social, gaming, music, mail, etc.) via password-recovery probing. Returns a list of dicts with keys: name, domain, exists (bool), rateLimit (bool), emailrecovery, phoneNumber, others. Use check_email_claimed_only to get only confirmed hits. Params: email (str, required) — target email address to search; timeout (int, default 10) — per-request timeout in seconds.",
+    "module_path": "community/holehe_tools.py",
+    "function_name": "check_email_registrations",
+    "repo": "holehe",
+    "github_url": "https://github.com/megadose/holehe",
+    "parameters": {
+      "email": {"type": "string", "required": true, "description": "Target email address to search across 120+ websites"},
+      "timeout": {"type": "integer", "required": false, "default": "10", "description": "Per-request timeout in seconds"}
+    }
+  },
+  {
+    "tool_name": "check_email_claimed_only",
+    "description": "Check which websites an email address is registered on and return ONLY confirmed hits (exists=True). Skips rate-limited or errored sites. Returns a list of dicts with keys: name, domain, emailrecovery, phoneNumber, others. Best when you just want to know where an email has accounts. Params: email (str, required) — target email address to search; timeout (int, default 10) — per-request timeout in seconds.",
+    "module_path": "community/holehe_tools.py",
+    "function_name": "check_email_claimed_only",
+    "repo": "holehe",
+    "github_url": "https://github.com/megadose/holehe",
+    "parameters": {
+      "email": {"type": "string", "required": true, "description": "Target email address to search across 120+ websites"},
+      "timeout": {"type": "integer", "required": false, "default": "10", "description": "Per-request timeout in seconds"}
+    }
+  }
+  ,
+  {
+    "tool_name": "download_video",
+    "description": "Download a video from YouTube or any yt-dlp supported site to a local directory. Downloads a pre-merged mp4 — no ffmpeg required. For highest quality pass format='bestvideo+bestaudio/best' (requires ffmpeg). Params: url (str, required) — full video URL e.g. 'https://www.youtube.com/watch?v=xxx'; output_dir (str, default 'output') — directory path to save the file; format (str, default 'best[ext=mp4]/best') — yt-dlp format selector string. Returns the downloaded file path on success or an error message string.",
+    "module_path": "community/yt_dlp_tools.py",
+    "function_name": "download_video",
+    "repo": "yt-dlp",
+    "github_url": "https://github.com/yt-dlp/yt-dlp",
+    "parameters": {
+      "url": {"type": "string", "required": true, "description": "Full video URL e.g. 'https://www.youtube.com/watch?v=xxx'"},
+      "output_dir": {"type": "string", "required": false, "default": "output", "description": "Directory path to save the downloaded file"},
+      "format": {"type": "string", "required": false, "default": "bestvideo+bestaudio/best", "description": "yt-dlp format selector string"}
+    }
+  },
+  {
+    "tool_name": "get_video_info",
+    "description": "Fetch metadata for a video without downloading it. Works with YouTube and thousands of other sites supported by yt-dlp. Params: url (str, required) — full video URL. Returns JSON string with title, duration (seconds), uploader, view_count, upload_date, webpage_url, formats_count.",
+    "module_path": "community/yt_dlp_tools.py",
+    "function_name": "get_video_info",
+    "repo": "yt-dlp",
+    "github_url": "https://github.com/yt-dlp/yt-dlp",
+    "parameters": {
+      "url": {"type": "string", "required": true, "description": "Full video URL e.g. 'https://www.youtube.com/watch?v=xxx'"}
+    }
+  },
+  {
+    "tool_name": "download_audio",
+    "description": "Download only the audio track from a video as an m4a file. Works with YouTube and thousands of other sites. Params: url (str, required) — full video URL; output_dir (str, default 'output') — directory path to save the file. Returns the audio file path on success or an error message string. Requires ffmpeg installed on the system.",
+    "module_path": "community/yt_dlp_tools.py",
+    "function_name": "download_audio",
+    "repo": "yt-dlp",
+    "github_url": "https://github.com/yt-dlp/yt-dlp",
+    "parameters": {
+      "url": {"type": "string", "required": true, "description": "Full video URL"},
+      "output_dir": {"type": "string", "required": false, "default": "output", "description": "Directory path to save the audio file"}
+    }
   }
 ]
